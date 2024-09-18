@@ -1,0 +1,41 @@
+import nltk
+from nltk.stem import WordNetLemmatizer
+from nltk import word_tokenize
+lemmatizer = WordNetLemmatizer()
+
+intents = {
+    "greeting": ["hi", "hello", "hey"],
+    "goodbye": ["bye", "see you later", "goodbye"],
+    "thanks": ["thank you", "thanks"],
+    "help": ["help", "support", "assistant"],
+    "order_status": ["order", "status"],
+    "return_policy": ["return", "policy"]
+}
+
+responses = {
+    "greeting": "Hello! How can I assist you today?",
+    "goodbye": "Goodbye! Have a great day!",
+    "thanks": "You're welcome!",
+    "help": "How can I help you?",
+    "order_status": "Your order is being processed. Please check your email for updates.",
+    "return_policy": "You can return your item within 30 days. Please visit our website for details."
+}
+
+def process_input(user_input):
+    tokens = word_tokenize(user_input)
+    tokens = [lemmatizer.lemmatize(token) for token in tokens]
+    for intent, keywords in intents.items():
+        for keyword in keywords:
+            if keyword in tokens:
+                return responses[intent]
+    return "I didn't understand that. Please try again."
+
+def chatbot():
+    print("Chatbot: Welcome to our customer service! How can I assist you today?")
+    while True:
+        user_input = input("User: ").lower()
+        if user_input == "quit":
+            break
+        print("Chatbot: ", process_input(user_input))
+
+chatbot()
